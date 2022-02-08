@@ -7,7 +7,7 @@ const Signup = (props) => {
     const firebase = useContext(FirebaseContext);
 
     const data = {
-        pseudo: '',
+        pseudo: '', 
         email: '',
         password: '',
         confirmPassword: ''
