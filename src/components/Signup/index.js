@@ -17,6 +17,10 @@ const Signup = (props) => {
     const [error, setError] = useState('')
 
     const handleChange = (e) => {
+        /* Dans la ligne de code ci dessous, nous voulons set les datas de plusieurs  données,
+        à savoir pseudo,email, password, confirmPassword, mais pour faire de façon dynamique
+        nous pouvons ciblé les éléments par leurs id, par exemple, l'input pseudo à un id='pseudo'
+        ce dernier est accessible via l'event, e.target.id, puis nous y ajoutons la valeur. */
         setLoginData({...loginData, [e.target.id]: e.target.value})
     }
 
