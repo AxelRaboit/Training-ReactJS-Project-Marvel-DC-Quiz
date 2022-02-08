@@ -13,7 +13,7 @@ const config = {
 class Firebase {
     constructor() {
         app.initializeApp(config);
-        this.app.auth();
+        this.auth = app.auth();
     }
 
     signupUser = (email, password) => {
