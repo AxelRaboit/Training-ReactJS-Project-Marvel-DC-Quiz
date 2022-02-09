@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { QuizMarvel } from '../quizMarvel';
 import Levels from '../Levels';
 import ProgressBar from '../ProgressBar';
+
+toast.configure();
 
 class Quiz extends Component {
 
@@ -15,7 +19,8 @@ class Quiz extends Component {
         idQuestion: 0,
         btnDisabled: true,
         userAnswer: null,
-        score: 0
+        score: 0,
+        showWelcomeMsg: false
     }
 
     storedDataRef = React.createRef();
@@ -57,6 +62,45 @@ class Quiz extends Component {
             this.setState((prevState) => ({
                 score: prevState.score + 1
             }))
+
+            toast.success('Bravo, bonne réponse !', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                bodyClassName: 'toastify-color'
+            })
+        } else {
+
+            toast.error('Dommage, mauvaise réponse !', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                bodyClassName: 'toastify-color'
+            })
+        }
+    }
+
+    showWelcomeMsg = (pseudo) => {
+        if(!this.state.showWelcomeMsg) {
+
+            this.setState({
+                showWelcomeMsg: true
+            })
+
+            toast(`Bienvenue ${pseudo}, et bonne chance !`, {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false
+            });
         }
     }
 
@@ -80,6 +124,10 @@ class Quiz extends Component {
                 userAnswer: null,
                 btnDisabled: true
             })
+        }
+
+        if(this.props.userData.pseudo){
+            this.showWelcomeMsg(this.props.userData.pseudo)
         }
     }
 
