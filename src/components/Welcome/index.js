@@ -39,6 +39,8 @@ const Welcome = (props) => {
     return userSession === null ? (
         <Fragment>
             <div className="loader">
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center', color: 'white'}}>
                 <p>Loading ...</p>
             </div>
         </Fragment>
