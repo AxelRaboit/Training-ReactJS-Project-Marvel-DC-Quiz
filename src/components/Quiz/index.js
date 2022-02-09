@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { QuizMarvel } from '../quizMarvel';
 import Levels from '../Levels';
+import StageComplete from '../StageComplete';
 import ProgressBar from '../ProgressBar';
+
 
 toast.configure();
 
@@ -20,7 +22,8 @@ class Quiz extends Component {
         btnDisabled: true,
         userAnswer: null,
         score: 0,
-        showWelcomeMsg: false
+        showWelcomeMsg: false,
+        quizEnd: false
     }
 
     storedDataRef = React.createRef();
@@ -50,7 +53,7 @@ class Quiz extends Component {
     nextQuestion = () => {
         //When we arrive to the last question -> 9/10
         if(this.state.idQuestion === this.state.maxQuestions - 1) {
-            // end
+            this.setState({quizEnd: true })
         } else {
             this.setState((prevState) => ({
                 idQuestion: prevState.idQuestion + 1
@@ -138,6 +141,12 @@ class Quiz extends Component {
         })
     }
 
+    StageComplete = () => {
+        this.setState({
+            quizEnd: true
+        })
+    }
+
     render() {
 
         /* const { email, pseudo } = this.props.userData; */
@@ -153,24 +162,28 @@ class Quiz extends Component {
                 </p>
             )
         })
+
         
-        return (
-            <div>
-                <Levels />
-                <ProgressBar/>
-                <h2>{this.state.question}</h2>
+        
+        return this.state.quizEnd
+            ? (<StageComplete />)
+            : (
+                <Fragment>
+                    <Levels />
+                    <ProgressBar/>
+                    <h2>{this.state.question}</h2>
 
-                { displayOptions }
+                    { displayOptions }
 
-                <button
-                    disabled={this.state.btnDisabled}
-                    className="btnSubmit"
-                    onClick={this.nextQuestion}    
-                >
-                    Suivant
-                </button>
-            </div>
-        )
+                    <button
+                        disabled={this.state.btnDisabled}
+                        className="btnSubmit"
+                        onClick={this.nextQuestion}    
+                    >
+                        Suivant
+                    </button>
+                </Fragment>
+            )
     }
 };
 
