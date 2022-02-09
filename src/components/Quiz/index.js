@@ -166,7 +166,7 @@ class Quiz extends Component {
         
         
         return this.state.quizEnd
-            ? (<StageComplete />)
+            ? (<StageComplete ref={this.storedDataRef} />)
             : (
                 <Fragment>
                     <Levels />

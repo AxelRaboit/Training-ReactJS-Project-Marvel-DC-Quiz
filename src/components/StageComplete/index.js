@@ -1,11 +1,59 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState } from 'react';
 
-const StageComplete = () => {
+const StageComplete = React.forwardRef((props, ref) => {
+    
+    const [askedQuestions, setAskedQuestions] = useState([]);
+    console.log(askedQuestions);
+
+    useEffect(() => {
+        setAskedQuestions(ref.current)
+    }, [ref])
+
+    const questionAnswer = askedQuestions.map((question) => {
+        return (
+            <tr key={question.id}>
+                <td>{question.question}</td>
+                <td>{question.answer}</td>
+                <td>
+                    <button className='btnInfo'>Infos</button>
+                </td>
+            </tr>
+        )
+    })
+
     return (
-        <div>
-        StageComplete
-        </div>
-    )
-}
+        <Fragment>
+            <div className='stepsBtnContainer'>
+                <p className='successMsg'>Bravo, vous êtes un expert !</p>
+                <button className='btnResult success'>Niveau suivant</button>
+            </div>
+            <div className='percentage'>
+                <div className='progressPercent'>Réussite: 10%</div>
+                <div className='progressPercent'>Note: 10/10</div>
+            </div>
 
-export default StageComplete
+            <hr />
+
+            <p>Les réponses aux questions posées:</p>
+
+            <div className='answerContainer'>
+                <table className='answers'>
+                    <thead>
+                        <tr>
+                            <th>Questions</th>
+                            <th>Réponses</th>
+                            <th>Informations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {questionAnswer}
+                    </tbody>
+                </table>
+            </div>
+        </Fragment>
+
+    )
+})
+
+
+export default React.memo(StageComplete)
