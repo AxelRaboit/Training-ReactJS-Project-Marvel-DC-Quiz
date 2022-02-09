@@ -26,8 +26,14 @@ const Signup = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { email, password } = loginData;
+        const { email, password, pseudo } = loginData;
         firebase.signupUser(email, password)
+        .then( authUser => {
+            return firebase.user(authUser.user.uid).set({
+                pseudo: pseudo, //We can also just saying 'pseudo' both elements are called in the same way.
+                email: email,
+            })
+        })
         .then(() => {
             //Permet d'effacer les variables d'état pour les remettres à l'état initial
             setLoginData({...data});
