@@ -42,9 +42,7 @@ const Login = (props) => {
     return (
         <div className='signUpLoginBox'>
             <div className="slContainer">
-                <div className='formBoxLeftLogin'>
-                    
-                </div>
+                <div className='formBoxLeftLogin'></div>
                 <div className='formBoxRight'>
                     <div className='formContent'>
 
@@ -67,6 +65,8 @@ const Login = (props) => {
                         </form>
                         <div className='linkContainer'>
                             <Link to="/signup" className='simpleLink'>Nouveau sur marvel dc quiz ? Inscrivez-vous maintenant !</Link>
+                            <br />
+                            <Link to="/forgetpassword" className='simpleLink'>Mot de passe oublié ? Récuperez le ici.</Link>
                         </div>
                     </div>
                 </div>

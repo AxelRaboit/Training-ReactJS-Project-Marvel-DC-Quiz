@@ -362,6 +362,13 @@ button[disabled]:hover {
 .simpleLink:hover {
   color: var(--red-color);
 }
+
+.successMessage {
+  border: solid 1px green !important;
+  background-color: green;
+  color: #ffffff !important;
+}
+
 /* END SIGNUP - LOGIN - FORGETPASSWORD */
 
 /* LOADER */

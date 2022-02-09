@@ -16,18 +16,18 @@ class Firebase {
         this.auth = app.auth();
     }
 
-    // inscription
+    // create an account
     signupUser = (email, password) => 
     this.auth.createUserWithEmailAndPassword(email, password);
 
-    // Connexion
+    // connect to an account
     loginUser = (email, password) => 
     this.auth.signInWithEmailAndPassword(email, password);
 
-    // Déconnexion
+    // disconnect an account
     signoutUser = () => this.auth.signOut();
 
-    // Récupérer le mot de passe
+    // retrieve the password
     passwordReset = email => this.auth.sendPasswordResetEmail(email); 
 
 }
