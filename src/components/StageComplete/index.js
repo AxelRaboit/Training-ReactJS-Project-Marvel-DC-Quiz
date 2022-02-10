@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 const StageComplete = React.forwardRef((props, ref) => {
 
-    const {levelNames, score, maxQuestions, quizLevel, percent} = props;
+    const {levelNames, score, maxQuestions, quizLevel, percent, loadLevelQuestions} = props;
     
     const [askedQuestions, setAskedQuestions] = useState([]);
 
@@ -11,6 +11,18 @@ const StageComplete = React.forwardRef((props, ref) => {
     }, [ref])
 
     const averageGrade = maxQuestions / 2;
+
+    if (score < averageGrade) {
+        //To teleport the user at the beginning of the quiz (level 1)
+        /* setTimeout(() => {
+            loadLevelQuestions(0);
+        }, 3000) */
+
+        //To teleport the user at the start of the current quiz level
+        setTimeout(() => {
+            loadLevelQuestions(quizLevel);
+        }, 3000)
+    }
 
     const decision = score >= averageGrade
         ? (
@@ -21,14 +33,21 @@ const StageComplete = React.forwardRef((props, ref) => {
                         (
                             <Fragment>
                                 <p className='successMsg'>Bravo, passez au niveau suivant !</p>
-                                <button className='btnResult success'>Niveau suivant</button>
+                                <button 
+                                    className='btnResult success'
+                                    onClick={() => loadLevelQuestions(quizLevel)}
+                                >Niveau suivant
+                                </button>
                             </Fragment>
                         )
                         :
                         (
                             <Fragment>
                                 <p className='successMsg'>Bravo, vous êtes un expert !</p>
-                                <button className='btnResult success'>Niveau suivant</button>
+                                <button
+                                    className='btnResult success'
+                                    onClick={() => loadLevelQuestions(0)}
+                                >Accueil</button>
                             </Fragment>
                         )
                     }
@@ -70,6 +89,7 @@ const StageComplete = React.forwardRef((props, ref) => {
     (
         <tr>
             <td colSpan='3'>
+                <div className='loader'></div>
                 <p style={{textAlign: 'center', color: 'red'}}>
                     Pas de réponses !
                 </p>
