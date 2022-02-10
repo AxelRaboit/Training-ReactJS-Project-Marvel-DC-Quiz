@@ -159,16 +159,15 @@ class Quiz extends Component {
         if (percent >= 50) {
             this.setState({
                 quizLevel: this.state.quizLevel + 1,
-                percent
+                percent: percent
             })
         } else {
-            this.setState({percent})
+            this.setState({percent: percent})
         }
     }
 
     loadLevelQuestions = (param) => {
         this.setState({...initialState, quizLevel: param})
-
         this.loadQuestions(this.state.levelNames[param]);
     }
 
