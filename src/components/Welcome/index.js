@@ -32,7 +32,7 @@ const Welcome = (props) => {
         }
 
         return () => {
-            //Permet de cleaner l'effet
+            //Allow to clean the effect
             listener()
         }
     },[userSession])
