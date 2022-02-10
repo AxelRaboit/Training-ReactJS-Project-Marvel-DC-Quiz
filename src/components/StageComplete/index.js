@@ -2,25 +2,68 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { GiTrophyCup } from 'react-icons/gi';
 import Loader from '../Loader';
 import Modal from '../Modal';
+import axios from 'axios';
 
 const StageComplete = React.forwardRef((props, ref) => {
 
     const {levelNames, score, maxQuestions, quizLevel, percent, loadLevelQuestions} = props;
-    
-    const [askedQuestions, setAskedQuestions] = useState([]);
 
+    const API_PUBLIC_KEY = process.env.REACT_APP_MARVEL_API_KEY;
+    const hash = '820ed3c49b597a27c95b09fff605c807';
+    const [askedQuestions, setAskedQuestions] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [characterInfos, setCharacterInfos] = useState([]);
+    const [isLoading, setisLoading] = useState(true);
 
     useEffect(() => {
         setAskedQuestions(ref.current)
+
+        if(localStorage.getItem('marvelStorageDate')) {
+        const date = localStorage.getItem('marvelStorageDate');
+            checkDataAge(date);
+        }
     }, [ref])
+
+    const checkDataAge = (date) => {
+        const today = Date.now();
+        const timeDifference = today - date;
+
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+        if(daysDifference >= 15) {
+            localStorage.clear();
+            localStorage.setItem('marvelStorageDate', Date.now());
+        }
+    }
 
     const showModal = (id) => {
         setOpenModal(true);
+
+        if( localStorage.getItem(id) ){
+
+            setCharacterInfos(JSON.parse(localStorage.getItem(id)));
+            setisLoading(false);
+
+        } else {
+            axios
+            .get(`https://gateway.marvel.com/v1/public/characters/${id}?ts=1&apikey=${API_PUBLIC_KEY}&hash=${hash}`)
+            .then((response) => {
+                setCharacterInfos(response.data);
+                setisLoading(false);
+    
+                localStorage.setItem(id, JSON.stringify(response.data));
+                if( !localStorage.getItem('marvelStorageDate') ){
+                    localStorage.setItem('marvelStorageDate', Date.now());
+                }
+            })
+            .catch((error) => {console.log(error)})
+        }
+
     }
 
     const closeModal = () => {
         setOpenModal(false);
+        setisLoading(true);
     }
 
     const averageGrade = maxQuestions / 2;
@@ -117,6 +160,31 @@ const StageComplete = React.forwardRef((props, ref) => {
             </td>
         </tr>
     )
+
+    const resultInModal = !isLoading ? (
+        <Fragment>
+            <div className="modalHeader">
+                <h2>{characterInfos.data.results[0].name}</h2>
+            </div>
+            <div className="modalBody">
+                <h3>Titre 2</h3>
+            </div>
+            <div className="modalFooter">
+                <button className="modalBtn">Fermer</button>
+            </div>
+        </Fragment>
+    )
+    : 
+    (
+        <Fragment>
+            <div className="modalHeader">
+                <h2>Réponse de Marvel ...</h2>
+            </div>
+            <div className="modalBody">
+                <Loader />
+            </div>
+        </Fragment>
+    )
     
 
     return (
@@ -142,19 +210,8 @@ const StageComplete = React.forwardRef((props, ref) => {
                 </table>
             </div>
 
-            <Modal
-                showModal={openModal}
-                closeModal={closeModal}
-            >
-                <div className="modalHeader">
-                    <h2>Titre</h2>
-                </div>
-                <div className="modalBody">
-                    <h3>Titre 2</h3>
-                </div>
-                <div className="modalFooter">
-                    <button className="modalBtn">Fermer</button>
-                </div>
+            <Modal showModal={openModal} closeModal={closeModal}>
+                {resultInModal}
             </Modal>
 
         </Fragment>
